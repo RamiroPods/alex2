@@ -130,7 +130,7 @@ export function TextSummarizer() {
               <FileText className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Text Summarizer</h1>
+              <h1 className="text-2xl font-bold text-gray-900">alex2</h1>
               <p className="text-gray-600">Transform long texts into concise summaries using Writer AI</p>
             </div>
           </div>
