@@ -1,10 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from writerai import Writer
 import os
 from typing import Optional
+import asyncio
+from datetime import datetime, timedelta
 
 # Initialize FastAPI app
 app = FastAPI(title="Text Summarizer API", version="1.0.0")
@@ -158,18 +161,23 @@ async def get_api_info():
 
 @app.get("/")
 async def get_home():
-    """Get information about the API"""
-    return {
-        "name": "Text Summarizer API",
-        "version": "1.0.0",
-        "description": "AI-powered text summarization using Writer SDK",
-        "endpoints": {
-            "/health": "Health check",
-            "/api/summarize": "Summarize text (POST)",
-            "/api/info": "API information"
-        },
-        "supported_styles": ["concise", "detailed", "bullet_points"]
-    }
+    """Stream current date every 2 seconds for one minute"""
+    
+    async def date_stream():
+        """Generator function that yields current date every 2 seconds"""
+        start_time = datetime.now()
+        end_time = start_time + timedelta(seconds=60)  # 1 minute
+        
+        while datetime.now() < end_time:
+            current_time = datetime.now()
+            yield f"data: {current_time.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+            await asyncio.sleep(2)
+    
+    return StreamingResponse(
+        date_stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"}
+    )
 
 if __name__ == "__main__":
     import uvicorn
