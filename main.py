@@ -156,8 +156,20 @@ async def get_api_info():
         "supported_styles": ["concise", "detailed", "bullet_points"]
     }
 
-# Mount static files from UI dist folder (must be last to avoid conflicts with API routes)
-app.mount("/", StaticFiles(directory="ui/dist", html=True), name="static")
+@app.get("/")
+async def get_home():
+    """Get information about the API"""
+    return {
+        "name": "Text Summarizer API",
+        "version": "1.0.0",
+        "description": "AI-powered text summarization using Writer SDK",
+        "endpoints": {
+            "/health": "Health check",
+            "/api/summarize": "Summarize text (POST)",
+            "/api/info": "API information"
+        },
+        "supported_styles": ["concise", "detailed", "bullet_points"]
+    }
 
 if __name__ == "__main__":
     import uvicorn
