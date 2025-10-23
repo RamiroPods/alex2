@@ -148,7 +148,23 @@ Concise summary:"""
 async def get_api_info():
     """Get information about the API"""
     return {
-        "name": "Text Summarizer API",
+        "name": "alex2",
+        "version": "1.0.0",
+        "description": "AI-powered text summarization using Writer SDK",
+        "endpoints": {
+            "/health": "Health check",
+            "/api/summarize": "Summarize text (POST)",
+            "/api/info": "API information"
+        },
+        "supported_styles": ["concise", "detailed", "bullet_points"]
+    }
+#
+# Additional endpoint to get API info
+@app.get("/")
+async def get_home():
+    """Get information about the API"""
+    return {
+        "name": "alex2",
         "version": "1.0.0",
         "description": "AI-powered text summarization using Writer SDK",
         "endpoints": {
@@ -159,8 +175,8 @@ async def get_api_info():
         "supported_styles": ["concise", "detailed", "bullet_points"]
     }
 
-@app.get("/")
-async def get_home():
+@app.get("/stream")
+async def get_stream():
     """Stream current date every 2 seconds for one minute"""
     
     async def date_stream():
